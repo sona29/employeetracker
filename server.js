@@ -74,5 +74,5 @@ const start = () => {
     app.listen(PORT, () => start());
   });
   
-  module.exports = { start};
+
   
