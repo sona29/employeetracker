@@ -130,4 +130,56 @@ const connection = mysql.createConnection({
   
   } ;
 
- module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment, addRole};
+
+  //function to add a role
+ const addEmployee = () =>{
+    connection.query('SELECT * FROM department', (err, results) => {
+        if (err) throw err;
+    inquirer
+    .prompt([
+      {
+        name: 'firstName',
+        type: 'input',
+        message: 'Please enter first name of employee',
+      }, 
+      {
+        name: 'lastName',
+        type: 'input',
+        message: 'Please enter last name of employee',
+      },  
+      {
+        name: 'department',
+        type: 'rawlist',
+        choices() {
+          const choiceArray = [];
+          results.forEach(({ name }) => {
+            choiceArray.push(name);
+          });
+          return choiceArray;
+        },
+        message: 'Please select the department for this new employee',
+      },   
+      
+    ])
+    .then((answer) => {
+      // when finished prompting, insert a new item into the db with that info
+      connection.query(
+        'INSERT INTO role SET ?',
+        // QUESTION: What does the || 0 do?
+        {
+          name: answer.department,
+          
+        },
+        (err) => {
+          if (err) throw err;
+          console.log('A new department successfully!');
+          // re-prompt the user for if they want to bid or post
+          start.start();
+        }
+      );
+    });
+});
+  
+  } ;
+
+ module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment, addRole,addEmployee};
