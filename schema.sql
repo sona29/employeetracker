@@ -92,7 +92,7 @@ VALUES ("Cheryl","Cunanan",4,2);
 INSERT INTO employee (first_name,last_name,role_id,manager_id)
 VALUES ("Helen","Tamang",5,2);
 
-SELECT employee.first_name, employee.last_name, role.title, role.salary
+SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name
 FROM employee
 INNER JOIN role ON employee.role_id = role.id
 INNER JOIN department ON roll.department_id = department.id;
