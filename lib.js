@@ -1,7 +1,7 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const inquirer = require('inquirer');
 
-const startFunction = require("./server");
+const start = require("./server");
 
 const connection = mysql.createConnection({
     host: 'localhost', 
@@ -55,7 +55,7 @@ const connection = mysql.createConnection({
       {
         name: 'department',
         type: 'input',
-        message: 'Please enter the name of the department',
+        message: 'Please enter the name of the new department',
       },    
       
     ])
@@ -72,11 +72,62 @@ const connection = mysql.createConnection({
           if (err) throw err;
           console.log('A new department successfully!');
           // re-prompt the user for if they want to bid or post
-          startFunction.start();
+          start.start();
         }
       );
     });
   
   } ;
 
- module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment};
+  //function to add a role
+ const addRole = () =>{
+    connection.query('SELECT * FROM department', (err, results) => {
+        if (err) throw err;
+    inquirer
+    .prompt([
+      {
+        name: 'role',
+        type: 'input',
+        message: 'Please enter the name of the new role',
+      }, 
+      {
+        name: 'salary',
+        type: 'input',
+        message: 'Please enter the salary for this new role',
+      },  
+      {
+        name: 'department',
+        type: 'rawlist',
+        choices() {
+          const choiceArray = [];
+          results.forEach(({ name }) => {
+            choiceArray.push(name);
+          });
+          return choiceArray;
+        },
+        message: 'Please select the department for this new role',
+      },   
+      
+    ])
+    .then((answer) => {
+      // when finished prompting, insert a new item into the db with that info
+      connection.query(
+        'INSERT INTO role SET ?',
+        // QUESTION: What does the || 0 do?
+        {
+          name: answer.department,
+          
+        },
+        (err) => {
+          if (err) throw err;
+          console.log('A new department successfully!');
+          // re-prompt the user for if they want to bid or post
+          start.start();
+        }
+      );
+    });
+});
+  
+  } ;
+
+ module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment, addRole};
