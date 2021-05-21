@@ -33,7 +33,7 @@ const start = () => {
         name: 'userFunctions',
         type: 'list',
         message: 'What would you like to do?',
-        choices: ['View All Department','View All Roles','View All Employees', 'View All Employees By Department', 'View All Employees By Manager','Add a Department','Add an Employee','Add an Role','Update Employee Role','EXIT'],
+        choices: ['View All Department','View All Roles','View All Employees', 'View All Employees By Department', 'View All Employees By Manager','Add a Department','Add an Employee','Add a Role','Update Employee Role','EXIT'],
       })
       .then((answer) => {
         // based on their answer, either call the bid or the post functions
@@ -49,8 +49,11 @@ const start = () => {
         } else if (answer.userFunctions === 'Add a Department') {
         lib.addDepartment();
       }
-      else if (answer.userFunctions === 'Add an Role') {
+      else if (answer.userFunctions === 'Add a Role') {
         lib.addRole();
+      }
+      else if (answer.userFunctions === 'Add an Employee') {
+        lib.addEmployee();
       }
         else {
           // connection.end();
