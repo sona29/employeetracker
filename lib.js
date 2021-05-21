@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const inquirer = require('inquirer');
 
 const connection = mysql.createConnection({
     host: 'localhost', 
@@ -45,4 +46,35 @@ const connection = mysql.createConnection({
 
 } ;
 
- module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment};
+ //function to add department
+ const addDepartment = () =>{
+    inquirer
+    .prompt([
+      {
+        name: 'department',
+        type: 'input',
+        message: 'Please enter the name of the department',
+      },    
+      
+    ])
+    .then((answer) => {
+      // when finished prompting, insert a new item into the db with that info
+      connection.query(
+        'INSERT INTO department SET ?',
+        // QUESTION: What does the || 0 do?
+        {
+          name: answer.department,
+          
+        },
+        (err) => {
+          if (err) throw err;
+          console.log('A new department successfully!');
+          // re-prompt the user for if they want to bid or post
+        start();
+        }
+      );
+    });
+  
+  } ;
+
+ module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment};
