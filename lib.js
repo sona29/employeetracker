@@ -149,4 +149,71 @@ const connection = mysql.createConnection({
   
   } ;
 
- module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment, addRole};
+
+  //function to add new employee
+ const addEmployee = () =>{
+    connection.query('SELECT * FROM department', (err, results) => {
+        if (err) throw err;
+    inquirer
+    .prompt([
+      {
+        name: 'firstName',
+        type: 'input',
+        message: 'Please enter the first name',
+        validate: function (answer) {
+            if (answer.length < 1) {
+                return console.log("You must enter the first name.");
+            }
+            return true;
+        }
+      }, 
+      {
+        name: 'lastName',
+        type: 'input',
+        message: 'Please enter the last name',
+        validate: function (answer) {
+            if (answer.length < 1) {
+                return console.log("Last name cannot be blank.");
+            }
+            return true;
+        }
+      },  
+      {
+        name: 'department',
+        type: 'rawlist',
+        choices() {
+          const choiceArray = [];
+          results.forEach(({ name,id }) => {
+            choiceArray.push({name:name, value: id});
+          });
+          return choiceArray;
+        },
+        message: 'Please select the department for this new employee',
+      },   
+      
+    ])
+    .then((answer) => {
+        
+    //   inserting into role table
+      connection.query(
+        'INSERT INTO role SET ?',
+        // QUESTION: What does the || 0 do?
+        {
+          title: answer.newRole,
+          salary:answer.salary,
+          department_id:answer.department
+          
+        },
+        (err) => {
+          if (err) throw err;
+          console.log('A new role added successfully!');
+          // re-prompt the user for if they want to bid or post
+        //   start.start();
+        }
+      );
+    });
+});
+  
+  } ;
+
+ module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment, addRole,addEmployee};
