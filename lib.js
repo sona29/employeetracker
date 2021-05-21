@@ -1,6 +1,8 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 
+const startFunction = require("./server");
+
 const connection = mysql.createConnection({
     host: 'localhost', 
     port: 3306,      
@@ -70,7 +72,7 @@ const connection = mysql.createConnection({
           if (err) throw err;
           console.log('A new department successfully!');
           // re-prompt the user for if they want to bid or post
-        start();
+          startFunction.start();
         }
       );
     });
