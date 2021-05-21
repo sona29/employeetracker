@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
 
@@ -42,11 +42,15 @@ const start = () => {
         } else if (answer.userFunctions === 'View All Roles') {
             lib.viewAllRoles();
         } else if (answer.userFunctions === 'View All Employees') {
+
           lib.viewAllEmployees();
         } else if (answer.userFunctions === 'View All Employees By Department') {
           lib.viewAllEmployeesByDepartment();
         } else if (answer.userFunctions === 'Add a Department') {
         lib.addDepartment();
+      }
+      else if (answer.userFunctions === 'Add an Role') {
+        lib.addRole();
       }
         else {
           // connection.end();
