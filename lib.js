@@ -1,7 +1,9 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 
-const start = require("./server");
+// const start = require("./server");
+
+
 
 const connection = mysql.createConnection({
     host: 'localhost', 
@@ -10,6 +12,8 @@ const connection = mysql.createConnection({
     password: 'root',
     database: 'employee_trackerdb',
   });
+
+  
 
   
   //function to view all departments
@@ -72,7 +76,7 @@ const connection = mysql.createConnection({
           if (err) throw err;
           console.log('A new department successfully!');
           // re-prompt the user for if they want to bid or post
-          start.start();
+        //   start.start();
         }
       );
     });
@@ -86,22 +90,34 @@ const connection = mysql.createConnection({
     inquirer
     .prompt([
       {
-        name: 'role',
+        name: 'newRole',
         type: 'input',
         message: 'Please enter the name of the new role',
+        validate: function (answer) {
+            if (answer.length < 1) {
+                return console.log("You must enter the name of new role.");
+            }
+            return true;
+        }
       }, 
       {
         name: 'salary',
         type: 'input',
         message: 'Please enter the salary for this new role',
+        validate: function (answer) {
+            if (answer.length < 1) {
+                return console.log("The salary cannot be blank.");
+            }
+            return true;
+        }
       },  
       {
         name: 'department',
         type: 'rawlist',
         choices() {
           const choiceArray = [];
-          results.forEach(({ name }) => {
-            choiceArray.push(name);
+          results.forEach(({ name,id }) => {
+            choiceArray.push({name:name, value: id});
           });
           return choiceArray;
         },
@@ -110,19 +126,22 @@ const connection = mysql.createConnection({
       
     ])
     .then((answer) => {
-      // when finished prompting, insert a new item into the db with that info
+        
+    //   inserting into role table
       connection.query(
         'INSERT INTO role SET ?',
         // QUESTION: What does the || 0 do?
         {
-          name: answer.department,
+          title: answer.newRole,
+          salary:answer.salary,
+          department_id:answer.department
           
         },
         (err) => {
           if (err) throw err;
-          console.log('A new department successfully!');
+          console.log('A new role added successfully!');
           // re-prompt the user for if they want to bid or post
-          start.start();
+        //   start.start();
         }
       );
     });
@@ -130,56 +149,4 @@ const connection = mysql.createConnection({
   
   } ;
 
-
-  //function to add a role
- const addEmployee = () =>{
-    connection.query('SELECT * FROM department', (err, results) => {
-        if (err) throw err;
-    inquirer
-    .prompt([
-      {
-        name: 'firstName',
-        type: 'input',
-        message: 'Please enter first name of employee',
-      }, 
-      {
-        name: 'lastName',
-        type: 'input',
-        message: 'Please enter last name of employee',
-      },  
-      {
-        name: 'department',
-        type: 'rawlist',
-        choices() {
-          const choiceArray = [];
-          results.forEach(({ name }) => {
-            choiceArray.push(name);
-          });
-          return choiceArray;
-        },
-        message: 'Please select the department for this new employee',
-      },   
-      
-    ])
-    .then((answer) => {
-      // when finished prompting, insert a new item into the db with that info
-      connection.query(
-        'INSERT INTO role SET ?',
-        // QUESTION: What does the || 0 do?
-        {
-          name: answer.department,
-          
-        },
-        (err) => {
-          if (err) throw err;
-          console.log('A new department successfully!');
-          // re-prompt the user for if they want to bid or post
-          start.start();
-        }
-      );
-    });
-});
-  
-  } ;
-
- module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment, addRole,addEmployee};
+ module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment, addRole};
