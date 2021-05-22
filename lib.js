@@ -192,12 +192,12 @@ const connection = mysql.createConnection({
       },  
       {
         name: 'role',
-        type: 'rawlist',
+        type: 'list',
         choices() {
           const roleArray = [];
           // console.log(results);
           results.forEach(({ title,id }) => {
-            roleArray.push({id:id, value: title});
+            roleArray.push({name:title, value: id});
           });
           
      
@@ -208,7 +208,7 @@ const connection = mysql.createConnection({
       },   
       
     ])
-    .then((answer) => {
+    .then((answer) => {    
         
     //   inserting into role table
       connection.query(
