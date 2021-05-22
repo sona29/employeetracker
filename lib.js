@@ -164,7 +164,7 @@ const connection = mysql.createConnection({
 
   //function to add new employee
  const addEmployee = () =>{
-    connection.query('SELECT * FROM department', (err, results) => {
+    connection.query('SELECT * FROM role', (err, results) => {
         if (err) throw err;
     inquirer
     .prompt([
@@ -191,16 +191,19 @@ const connection = mysql.createConnection({
         }
       },  
       {
-        name: 'department',
+        name: 'role',
         type: 'rawlist',
         choices() {
           const choiceArray = [];
-          results.forEach(({ name,id }) => {
-            choiceArray.push({name:name, value: id});
+          console.log(results);
+          results.forEach(({ title,id }) => {
+            choiceArray.push({title:title, value: id});
           });
+          console.log(choiceArray);
           return choiceArray;
+         
         },
-        message: 'Please select the department for this new employee',
+        message: 'Please select the role for this new employee',
       },   
       
     ])
