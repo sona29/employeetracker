@@ -208,17 +208,17 @@ const connection = mysql.createConnection({
         
     //   inserting into role table
       connection.query(
-        'INSERT INTO role SET ?',
+        'INSERT INTO employee SET ?',
         // QUESTION: What does the || 0 do?
         {
-          title: answer.newRole,
-          salary:answer.salary,
+          first_name: answer.firstName,
+          last_name:answer.lastName,
           department_id:answer.department
           
         },
         (err) => {
           if (err) throw err;
-          console.log('A new role added successfully!');
+          console.log('A new employee added successfully!');
           // re-prompt the user for if they want to bid or post
         //   start.start();
         }
