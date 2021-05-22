@@ -149,16 +149,41 @@ const connection = mysql.createConnection({
   
   } ;
 
-  const getManager = () =>{
-    connection.query('SELECT * FROM employee WHERE id=1 OR id=2 OR id=3 OR id=4', (err, results) => {
-      if (err) throw err;
-      for(let i=0;i<results.length;i++){
+  // const getManager = () =>{
+  //   connection.query('SELECT * FROM employee WHERE id=1 OR id=2 OR id=3 OR id=4', (err, results) => {
+  //     if (err) throw err;
+  //     for(let i=0;i<results.length;i++){
 
-        console.log(results[i].first_name+ ' '+ results[i].last_name);
-      }
+  //       console.log(results[i].first_name+ ' '+ results[i].last_name);
+  //     }
       
-    });
+  //   });
 
+  // }
+
+  // const getManager = async () =>{
+  //   const allManagers = await connection.query('SELECT * FROM employee WHERE id=1 OR id=2 OR id=3 OR id=4', (err, results) => {
+  //       if (err) throw err;
+  //       let managers = [];
+  //       for(let i=0;i<results.length;i++){
+  //         managers.push(results[i]);
+  //       }
+  //       return managers;
+  //     })
+  // }
+
+  
+  //function to select manager
+  var managersArr = [];
+  function selectManager() {
+    connection.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL", function(err, res) {
+      if (err) throw err
+      for (var i = 0; i < res.length; i++) {
+        managersArr.push(res[i].first_name + ' ' +res[i].last_name);
+      }
+  
+    })
+    return managersArr;
   }
 
 
@@ -208,33 +233,26 @@ const connection = mysql.createConnection({
       },  
       {
         name: 'manager',
-        type: 'list',
-        choices() {  
-          const managerArray = [];       
-          connection.query('SELECT * FROM employee WHERE id=1 OR id=2 OR id=3 OR id=4', (err, res) => {
-            if (err) throw err;
-            console.log(res);
-
-          }); 
-               
-        
-          
-         
-        },
+        type: 'rawlist',
+        choices: selectManager(),
+       
         message: 'Please select manager for this new employee',
       },   
       
     ])
-    .then((answer) => {    
+    .then((answer) => {   
+      var managerId = selectManager().indexOf(answer.manager) + 1 ;
+     
         
-    //   inserting into role table
+    //   inserting into employee table
       connection.query(
         'INSERT INTO employee SET ?',
         // QUESTION: What does the || 0 do?
         {
           first_name: answer.firstName,
           last_name:answer.lastName,
-          role_id:answer.role
+          role_id:answer.role,
+          manager_id:managerId 
           
         },
         (err) => {
@@ -249,4 +267,5 @@ const connection = mysql.createConnection({
   
   } ;
 
- module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment, addRole,addEmployee, getManager};
+
+ module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment, addRole,addEmployee  };
