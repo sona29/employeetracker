@@ -194,13 +194,14 @@ const connection = mysql.createConnection({
         name: 'role',
         type: 'rawlist',
         choices() {
-          const choiceArray = [];
-          console.log(results);
+          const roleArray = [];
+          // console.log(results);
           results.forEach(({ title,id }) => {
-            choiceArray.push({title:title, value: id});
+            roleArray.push({id:id, value: title});
           });
-          console.log(choiceArray);
-          return choiceArray;
+          
+     
+          return roleArray;
          
         },
         message: 'Please select the role for this new employee',
@@ -216,7 +217,7 @@ const connection = mysql.createConnection({
         {
           first_name: answer.firstName,
           last_name:answer.lastName,
-          department_id:answer.department
+          role_id:answer.role
           
         },
         (err) => {
