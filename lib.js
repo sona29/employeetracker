@@ -205,6 +205,23 @@ const connection = mysql.createConnection({
          
         },
         message: 'Please select the role for this new employee',
+      },  
+      {
+        name: 'manager',
+        type: 'list',
+        choices() {  
+          const managerArray = [];       
+          connection.query('SELECT * FROM employee WHERE id=1 OR id=2 OR id=3 OR id=4', (err, res) => {
+            if (err) throw err;
+            console.log(res);
+
+          }); 
+               
+        
+          
+         
+        },
+        message: 'Please select manager for this new employee',
       },   
       
     ])
