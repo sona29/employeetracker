@@ -149,6 +149,18 @@ const connection = mysql.createConnection({
   
   } ;
 
+  const getManager = () =>{
+    connection.query('SELECT * FROM employee WHERE id=1 OR id=2 OR id=3 OR id=4', (err, results) => {
+      if (err) throw err;
+      for(let i=0;i<results.length;i++){
+
+        console.log(results[i].first_name+ ' '+ results[i].last_name);
+      }
+      
+    });
+
+  }
+
 
   //function to add new employee
  const addEmployee = () =>{
@@ -216,4 +228,4 @@ const connection = mysql.createConnection({
   
   } ;
 
- module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment, addRole,addEmployee};
+ module.exports = { viewAllDepartment,viewAllRoles, viewAllEmployees ,viewAllEmployeesByDepartment, addDepartment, addRole,addEmployee, getManager};
