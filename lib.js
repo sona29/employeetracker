@@ -33,7 +33,6 @@ const start = () => {
       ],
     })
     .then((answer) => {
-      // based on their answer, either call the bid or the post functions
       if (answer.userFunctions === "View All Department") {
         viewAllDepartment();
       } else if (answer.userFunctions === "View All Roles") {
@@ -126,7 +125,7 @@ const viewAllEmployeesByManager = () => {
             FROM employee INNER JOIN role 
             ON employee.role_id = role.id 
             INNER JOIN department ON role.department_id = department.id WHERE ?`,
-            // QUESTION: What does the || 0 do?
+
             {
               manager_id: answer.employee,
             },
@@ -156,7 +155,7 @@ const addDepartment = () => {
       // when finished prompting, insert a new item into the db with that info
       connection.query(
         "INSERT INTO department SET ?",
-        // QUESTION: What does the || 0 do?
+
         {
           name: answer.department,
         },
@@ -205,7 +204,7 @@ const updateEmployeeRole = () => {
         .then((answer) => {
           connection.query(
             "UPDATE employee SET ? WHERE ?",
-            // QUESTION: What does the || 0 do?
+
             [
               {
                 role_id: answer.role,
@@ -339,7 +338,7 @@ const addRole = () => {
         //   inserting into role table
         connection.query(
           "INSERT INTO role SET ?",
-          // QUESTION: What does the || 0 do?
+
           {
             title: answer.newRole,
             salary: answer.salary,
@@ -426,7 +425,7 @@ const addEmployee = () => {
         //   inserting into employee table
         connection.query(
           "INSERT INTO employee SET ?",
-          // QUESTION: What does the || 0 do?
+
           {
             first_name: answer.firstName,
             last_name: answer.lastName,
