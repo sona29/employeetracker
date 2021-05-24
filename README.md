@@ -1,4 +1,4 @@
-# MySQL : Employee Tracker
+# Object Oriented Programmming: Team Profile Generator
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -12,17 +12,23 @@
 
 ## Description
 
-This project generates professional README file using node.js. The readme file is the first thing that a person sees when they visit a repo on GitHub. A good quality readme represents polished Github profile. This readme generates professional readme file by entering answers to few questions. This includes what the app is for, how to use the app, how to install it, how to report issues, and how to make contributions.
+This project provides content management system for managing company's employees using node, inquirer and MySQL. This CMS gives you the following options:
+
+- Add departments, roles, employees
+- View departments, roles, employees
+- Update employee roles
+- Update employee managers
+- View employees by manager
 
 ## Installation
 
-npm install
+- Run npm install to install all dependencies
+- Run schema.sql in MySQLWorkbench
+- Run index.js
 
 ## Usage
 
 For instruction on how to use this project, please refer to walk-through video.
-
-\
 
 ## Contribution
 
