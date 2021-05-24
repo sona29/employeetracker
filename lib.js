@@ -1,8 +1,6 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 
-// const start = require("./server");
-
 const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -21,7 +19,6 @@ const start = () => {
         "View All Department",
         "View All Roles",
         "View All Employees",
-        "View All Employees By Department",
         "View All Employees By Manager",
         "Add a Department",
         "Add an Employee",
@@ -39,8 +36,8 @@ const start = () => {
         viewAllRoles();
       } else if (answer.userFunctions === "View All Employees") {
         viewAllEmployees();
-      } else if (answer.userFunctions === "View All Employees By Department") {
-        viewAllEmployeesByDepartment();
+      } else if (answer.userFunctions === "View All Employees By Manager") {
+        viewAllEmployeesByManager();
       } else if (answer.userFunctions === "Add a Department") {
         addDepartment();
       } else if (answer.userFunctions === "Add a Role") {
@@ -52,7 +49,7 @@ const start = () => {
       } else if (answer.userFunctions === "Update Employee Manager") {
         updateEmployeeManager();
       } else {
-        // connection.end();
+        connection.end();
       }
     });
 };
@@ -84,7 +81,10 @@ const viewAllRoles = () => {
 //function to view all employess
 const viewAllEmployees = () => {
   connection.query(
-    `SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id`,
+    `SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name 
+    FROM employee INNER JOIN role 
+    ON employee.role_id = role.id 
+    INNER JOIN department ON role.department_id = department.id`,
     (err, results) => {
       if (err) throw err;
       console.table(results);
@@ -93,16 +93,47 @@ const viewAllEmployees = () => {
   );
 };
 
-//function to view all employess
-const viewAllEmployeesByDepartment = () => {
+//function to view all employees by manager
+const viewAllEmployeesByManager = () => {
   connection.query(
-    `SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name 
-    FROM employee INNER JOIN role ON employee.role_id = role.id 
-    INNER JOIN department ON role.department_id = department.id`,
-    (err, results) => {
-      if (err) throw err;
-      console.table(results);
-      start();
+    "SELECT * FROM employee WHERE manager_id IS NULL",
+    (err, employees) => {
+      inquirer
+        .prompt([
+          {
+            name: "employee",
+            type: "rawlist",
+            choices() {
+              const choiceArray = [];
+              employees.forEach(({ first_name, last_name, id }) => {
+                choiceArray.push({
+                  name: first_name + " " + last_name,
+                  value: id,
+                });
+              });
+              return choiceArray;
+            },
+            message: "Please select the manager",
+          },
+        ])
+        .then((answer) => {
+          connection.query(
+            `SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name 
+            FROM employee INNER JOIN role 
+            ON employee.role_id = role.id 
+            INNER JOIN department ON role.department_id = department.id WHERE ?`,
+            // QUESTION: What does the || 0 do?
+            {
+              manager_id: answer.employee,
+            },
+            (err, results) => {
+              if (err) throw err;
+              console.table(results);
+              console.log("Employee listed by Manager!");
+              start();
+            }
+          );
+        });
     }
   );
 };
@@ -232,7 +263,7 @@ const updateEmployeeManager = () => {
       .then((answer) => {
         connection.query(
           "UPDATE employee SET ? WHERE ?",
-          // QUESTION: What does the || 0 do?
+
           [
             {
               manager_id: answer.manager,
@@ -313,29 +344,6 @@ const addRole = () => {
       });
   });
 };
-
-// const getManager = () =>{
-//   connection.query('SELECT * FROM employee WHERE id=1 OR id=2 OR id=3 OR id=4', (err, results) => {
-//     if (err) throw err;
-//     for(let i=0;i<results.length;i++){
-
-//       console.log(results[i].first_name+ ' '+ results[i].last_name);
-//     }
-
-//   });
-
-// }
-
-// const getManager = async () =>{
-//   const allManagers = await connection.query('SELECT * FROM employee WHERE id=1 OR id=2 OR id=3 OR id=4', (err, results) => {
-//       if (err) throw err;
-//       let managers = [];
-//       for(let i=0;i<results.length;i++){
-//         managers.push(results[i]);
-//       }
-//       return managers;
-//     })
-// }
 
 //function to select manager
 var managersArr = [];
@@ -429,7 +437,7 @@ module.exports = {
   viewAllDepartment,
   viewAllRoles,
   viewAllEmployees,
-  viewAllEmployeesByDepartment,
+  viewAllEmployeesByManager,
   addDepartment,
   addRole,
   addEmployee,
