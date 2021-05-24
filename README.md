@@ -1,4 +1,4 @@
-# Object Oriented Programmming: Team Profile Generator
+# MySQL: Employee Tracker
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
