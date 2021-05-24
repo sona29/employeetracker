@@ -225,17 +225,23 @@ const updateEmployeeRole = () => {
 
 const updateEmployeeManager = () => {
   connection.query("SELECT * FROM employee", (err, employees) => {
+    //for managers
     let managers = employees.filter((employee) => {
       return employee.manager_id === null;
     });
-    console.log(managers);
+
+    //for other employees
+    let nonManagers = employees.filter((employee) => {
+      return employee.manager_id !== null;
+    });
+
     inquirer
       .prompt([
         {
           name: "employee",
           type: "rawlist",
           choices() {
-            return employees.map(({ first_name, last_name, id }) => {
+            return nonManagers.map(({ first_name, last_name, id }) => {
               return {
                 name: first_name + " " + last_name,
                 value: id,
