@@ -1,6 +1,10 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 
+const logo = require("asciiart-logo");
+const config = require("./package.json");
+console.log(logo(config).render());
+
 const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
