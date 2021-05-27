@@ -40,7 +40,7 @@ Please feel free in making contribution to this repository. But please first dis
 
 ## Walk Through Video
 
-##### Video: [TeamProfile Generator Walk-through](https://drive.google.com/file/d/1vY416ZOJ_jlS4nKX5o9N84cZ1rIIUCEE/view)
+##### Video: [Employee Tracker Walk-through](https://drive.google.com/file/d/1vY416ZOJ_jlS4nKX5o9N84cZ1rIIUCEE/view)
 
 ## Questions
 
