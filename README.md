@@ -36,7 +36,7 @@ Please feel free in making contribution to this repository. But please first dis
 
 ## Mock up
 
-![alt text](images/emp.png)
+![alt text](images/emp.PNG)
 
 ## Walk Through Video
 
