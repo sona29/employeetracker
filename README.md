@@ -34,6 +34,14 @@ For instruction on how to use this project, please refer to walk-through video.
 
 Please feel free in making contribution to this repository. But please first discuss the change via email with me. I will try to get back to you as soon as possible.
 
+## Mock up
+
+![alt text](images/emp.png)
+
+## Walk Through Video
+
+https://drive.google.com/file/d/1vY416ZOJ_jlS4nKX5o9N84cZ1rIIUCEE/view
+
 ## Questions
 
 If you have any questions feel free to contact me:
